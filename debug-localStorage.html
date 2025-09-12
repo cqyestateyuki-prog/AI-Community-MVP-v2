@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug LocalStorage</title>
+</head>
+<body>
+    <h1>LocalStorage Debug</h1>
+    <div id="output"></div>
+    
+    <script>
+        // Check what's currently in localStorage
+        const posts = localStorage.getItem('ai_community_posts');
+        const initialized = localStorage.getItem('ai_community_initialized');
+        
+        document.getElementById('output').innerHTML = `
+            <h2>Current Storage State:</h2>
+            <p>Initialized: ${initialized}</p>
+            <p>Posts stored: ${posts ? 'Yes' : 'No'}</p>
+            <p>Posts count: ${posts ? JSON.parse(posts).length : 0}</p>
+            <hr>
+        `;
+        
+        if (posts) {
+            try {
+                const parsedPosts = JSON.parse(posts);
+                document.getElementById('output').innerHTML += `
+                    <h3>Current Posts:</h3>
+                    <ul>
+                        ${parsedPosts.slice(0, 5).map(post => `<li>${post.title} (${post.type}) - ${post.createdAt}</li>`).join('')}
+                    </ul>
+                    <p>... and ${parsedPosts.length - 5} more posts</p>
+                `;
+            } catch (e) {
+                document.getElementById('output').innerHTML += `<p style="color: red;">Error parsing posts: ${e.message}</p>`;
+            }
+        }
+        
+        // Clear and reinitialize
+        document.getElementById('output').innerHTML += `
+            <hr>
+            <h3>Actions:</h3>
+            <button onclick="clearAndReinit()">Clear & Reinitialize</button>
+        `;
+        
+        function clearAndReinit() {
+            localStorage.removeItem('ai_community_posts');
+            localStorage.removeItem('ai_community_initialized');
+            location.reload();
+        }
+    </script>
+</body>
+</html>
