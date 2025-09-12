@@ -104,7 +104,7 @@ export default function HomePage() {
     <AppLayout>
       <div className="p-8">
           {/* 顶部标题卡片 */}
-          <div className="bg-white border border-gray-300 rounded-lg p-8 mb-8">
+          <div className="bg-gray-100 border border-gray-300 rounded-lg p-8 mb-8">
             <h1 className="text-3xl font-bold text-black mb-2">AI Companion Community</h1>
             <p className="text-gray-600 mb-6">Discuss · Learn · Share · Grow</p>
             
@@ -113,7 +113,7 @@ export default function HomePage() {
               {/* 主推功能：Share Prompt 按钮 */}
               <Link 
                 href="/post/new?type=prompt_sharing"
-                className="flex items-center gap-2 bg-white text-black px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors"
+                className="flex items-center gap-2 bg-white text-black px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition-colors"
               >
                 <Code className="w-4 h-4" />
                 Share Prompt
