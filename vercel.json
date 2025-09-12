@@ -1,23 +1,6 @@
 {
   "version": 2,
   "name": "ai-community-mvp-v2",
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/next"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
-  ],
-  "functions": {
-    "app/**/*.tsx": {
-      "runtime": "nodejs18.x"
-    }
-  },
   "env": {
     "NEXT_PUBLIC_APP_NAME": "AI Community MVP v2",
     "NEXT_PUBLIC_APP_VERSION": "1.0.0"
