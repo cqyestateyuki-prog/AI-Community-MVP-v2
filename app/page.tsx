@@ -394,7 +394,7 @@ function PostCard({ post }: { post: Post }) {
 
   return (
     <Link href={`/post/${post.id}`}>
-      <div className="bg-white border border-gray-300 rounded-lg p-6 hover:shadow-sm transition-shadow cursor-pointer h-96 flex flex-col">
+      <div className="bg-white border border-gray-300 rounded-lg p-6 hover:shadow-sm transition-shadow cursor-pointer min-h-96 flex flex-col">
         {/* Author */}
         <div className="flex items-center gap-4 mb-4">
           <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
@@ -427,12 +427,12 @@ function PostCard({ post }: { post: Post }) {
 
 
           {post.type === 'community_event' && post.eventDate && (
-            <div className="bg-purple-50 rounded-lg p-3 mb-4">
+            <div className="bg-purple-50 rounded-lg p-3 mb-4 flex-shrink-0">
               <div className="flex items-center gap-2 mb-1">
                 <Calendar className="w-4 h-4 text-purple-600" />
                 <span className="text-xs font-medium text-purple-700">Event</span>
               </div>
-              <p className="text-xs text-purple-800">
+              <p className="text-xs text-purple-800 line-clamp-2">
                 {new Date(post.eventDate).toLocaleDateString()} {post.eventLocation && `• ${post.eventLocation}`}
               </p>
             </div>
@@ -453,27 +453,27 @@ function PostCard({ post }: { post: Post }) {
 
         {/* Stats and View Button */}
         <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100 flex-shrink-0">
-          <div className="flex items-center gap-3 text-sm text-gray-500 flex-wrap">
-            <span className="flex items-center gap-1">
+          <div className="flex items-center gap-3 text-sm text-gray-500 overflow-hidden">
+            <span className="flex items-center gap-1 whitespace-nowrap">
               <Heart className="w-4 h-4" />
               {post.likes}
             </span>
             {post.type === 'prompt_sharing' && (
-              <span className="flex items-center gap-1">
+              <span className="flex items-center gap-1 whitespace-nowrap">
                 <ThumbsUp className="w-4 h-4" />
                 {post.votes || 0}
               </span>
             )}
-            <span className="flex items-center gap-1">
+            <span className="flex items-center gap-1 whitespace-nowrap">
               <MessageCircle className="w-4 h-4" />
               {post.comments.length}
             </span>
-            <span className="flex items-center gap-1">
+            <span className="flex items-center gap-1 whitespace-nowrap">
               <Eye className="w-4 h-4" />
               {post.viewCount}
             </span>
           </div>
-          <button className="text-sm text-black hover:text-gray-600 font-medium flex items-center gap-1 flex-shrink-0">
+          <button className="text-sm text-black hover:text-gray-600 font-medium flex items-center gap-1 flex-shrink-0 ml-2">
             View
             <ArrowRight className="w-3 h-3" />
           </button>
