@@ -142,9 +142,6 @@ export default function NewPostPage() {
       postData = {
         ...postData,
         promptTitle: promptData.promptTitle,
-        promptCategory: promptData.promptCategory,
-        targetAudience: promptData.targetAudience,
-        useCaseDescription: promptData.useCaseDescription,
         promptIntroduction: promptData.promptIntroduction,
         promptContent: promptData.promptContent,
         exampleOutput: promptData.exampleOutput,

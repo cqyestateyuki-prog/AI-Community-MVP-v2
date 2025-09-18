@@ -25,9 +25,6 @@ interface SharePromptFormProps {
 
 export interface SharePromptFormData {
   promptTitle: string;
-  promptCategory: string;
-  targetAudience: string;
-  useCaseDescription: string;
   promptIntroduction: string;
   promptContent: string;
   exampleOutput: string;
@@ -35,9 +32,6 @@ export interface SharePromptFormData {
   tags: string[];
 }
 
-const CATEGORIES = [
-  'Marketing', 'Writing', 'Programming', 'Design', 'Data Analysis', 'Education', 'Business', 'Creative', 'Technology', 'Other'
-];
 
 const SUGGESTED_TAGS = [
   'Prompt Engineering', 'AI Tools', 'Productivity', 'Creative Writing', 'Code Generation', 'Marketing Copy', 'Data Analysis', 'Learning Assistant', 'Workflow', 'Automation'
@@ -46,9 +40,6 @@ const SUGGESTED_TAGS = [
 export default function SharePromptForm({ onBack, onPublish }: SharePromptFormProps) {
   const [formData, setFormData] = useState<SharePromptFormData>({
     promptTitle: '',
-    promptCategory: '',
-    targetAudience: '',
-    useCaseDescription: '',
     promptIntroduction: '',
     promptContent: '',
     exampleOutput: '',
@@ -115,9 +106,6 @@ export default function SharePromptForm({ onBack, onPublish }: SharePromptFormPr
 
   const canPublish = () => {
     return formData.promptTitle.trim() && 
-           formData.promptCategory && 
-           formData.targetAudience.trim() &&
-           formData.useCaseDescription.trim() &&
            formData.promptIntroduction.trim() &&
            formData.promptContent.trim() && 
            formData.exampleOutput.trim() && 
@@ -154,60 +142,16 @@ export default function SharePromptForm({ onBack, onPublish }: SharePromptFormPr
         {/* 表单内容 */}
         <div className="space-y-8">
           {/* 基础信息 */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Prompt Title *
-              </label>
-              <input
-                type="text"
-                value={formData.promptTitle}
-                onChange={(e) => setFormData({ ...formData, promptTitle: e.target.value })}
-                placeholder="Give your prompt a clear and descriptive title..."
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Category *
-              </label>
-              <select
-                value={formData.promptCategory}
-                onChange={(e) => setFormData({ ...formData, promptCategory: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              >
-                <option value="">Select category...</option>
-                {CATEGORIES.map((category) => (
-                  <option key={category} value={category}>{category}</option>
-                ))}
-              </select>
-            </div>
-          </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Target Audience *
+              Prompt Title *
             </label>
             <input
               type="text"
-              value={formData.targetAudience}
-              onChange={(e) => setFormData({ ...formData, targetAudience: e.target.value })}
-              placeholder="Who is this prompt for? (e.g., Product Managers, Designers, Developers...)"
+              value={formData.promptTitle}
+              onChange={(e) => setFormData({ ...formData, promptTitle: e.target.value })}
+              placeholder="Give your prompt a clear and descriptive title..."
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            />
-          </div>
-
-          {/* 使用场景描述 */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Use Case Description *
-            </label>
-            <textarea
-              value={formData.useCaseDescription}
-              onChange={(e) => setFormData({ ...formData, useCaseDescription: e.target.value })}
-              placeholder="Describe when and how to use this prompt, what problems it solves..."
-              className="w-full h-32 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
             />
           </div>
 
