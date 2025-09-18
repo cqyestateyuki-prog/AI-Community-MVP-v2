@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Community MVP v2 - UI/UX Information Architecture Visualization</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      --bg: #0b0c0f;
+      --panel: #111319;
+      --muted: #8b90a0;
+      --text: #e7e9ee;
+      --accent: #7dd3fc;
+      --line: #2a2f3a;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --error: #ef4444;
+    }
+    
+    * { box-sizing: border-box; }
+    
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    header {
+      text-align: center;
+      padding: 40px 0;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 40px;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      margin: 0 0 10px 0;
+      background: linear-gradient(135deg, var(--accent), var(--success));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .subtitle {
+      color: var(--muted);
+      font-size: 1.1rem;
+    }
+    
+    .section {
+      margin-bottom: 60px;
+    }
+    
+    .section-title {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      color: var(--accent);
+      border-left: 4px solid var(--accent);
+      padding-left: 16px;
+    }
+    
+    .mermaid {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+    
+    .info-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    
+    .info-card h3 {
+      margin: 0 0 15px 0;
+      color: var(--accent);
+    }
+    
+    .user-persona {
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      color: white;
+      border: none;
+    }
+    
+    .user-persona h3 {
+      color: white;
+    }
+    
+    .component-tree {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 20px;
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    
+    .component-tree .level-0 { color: var(--accent); font-weight: bold; }
+    .component-tree .level-1 { color: var(--success); margin-left: 20px; }
+    .component-tree .level-2 { color: var(--warning); margin-left: 40px; }
+    .component-tree .level-3 { color: var(--muted); margin-left: 60px; }
+    
+    .flow-step {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+      padding: 15px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    
+    .flow-step .step-number {
+      background: var(--accent);
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      font-weight: bold;
+    }
+    
+    .flow-step .step-content {
+      flex: 1;
+    }
+    
+    .flow-step .step-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    
+    .flow-step .step-desc {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    
+    .color-palette {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+    
+    .color-item {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    
+    .color-swatch {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      margin-right: 15px;
+      border: 1px solid var(--line);
+    }
+    
+    .color-info h4 {
+      margin: 0 0 5px 0;
+      font-size: 0.9rem;
+    }
+    
+    .color-info p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+    
+    .responsive-demo {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin: 20px 0;
+    }
+    
+    .device-frame {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .device-frame h4 {
+      margin: 0 0 15px 0;
+      color: var(--accent);
+    }
+    
+    .device-preview {
+      background: white;
+      border-radius: 8px;
+      padding: 10px;
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #333;
+      font-size: 0.8rem;
+    }
+    
+    @media (max-width: 768px) {
+      .responsive-demo {
+        grid-template-columns: 1fr;
+      }
+      
+      .container {
+        padding: 10px;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>AI Community MVP v2</h1>
+      <p class="subtitle">UI/UX Information Architecture Visualization / UI/UX 信息架构可视化</p>
+    </header>
+
+    <section class="section">
+      <h2 class="section-title">用户画像 / User Personas</h2>
+      <div class="info-grid">
+        <div class="info-card user-persona">
+          <h3>🆕 新手学习者 / Beginner Learner</h3>
+          <p><strong>目标:</strong> 快速找到可用的高质量提示词</p>
+          <p><strong>行为:</strong> 浏览、收藏、学习</p>
+          <p><strong>关键路径:</strong> 发现 → 阅读 → 收藏 → 试用</p>
+        </div>
+        <div class="info-card user-persona">
+          <h3>✨ 提示词创作者 / Prompt Creator</h3>
+          <p><strong>目标:</strong> 分享优质提示词，获得社区认可</p>
+          <p><strong>行为:</strong> 创作、发布、迭代、互动</p>
+          <p><strong>关键路径:</strong> 创作 → 发布 → 获得反馈 → 优化</p>
+        </div>
+        <div class="info-card user-persona">
+          <h3>👥 社区活跃用户 / Active Community User</h3>
+          <p><strong>目标:</strong> 参与讨论，发现新内容</p>
+          <p><strong>行为:</strong> 投票、评论、参与活动</p>
+          <p><strong>关键路径:</strong> 浏览 → 投票 → 评论 → 参与</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">网站结构 / Site Structure</h2>
+      <div class="mermaid">
+        graph TD
+          A[AI Community MVP v2] --> B[🏠 首页 / Home]
+          A --> C[✨ 分享提示词 / Share Prompt]
+          A --> D[📚 我的收藏 / Bookmarks]
+          A --> E[📝 我的发布 / My Posts]
+          A --> F[👤 用户中心 / User Center]
+          
+          B --> B1[动态流 / Feed]
+          B --> B2[趋势内容 / Trending]
+          B --> B3[快速操作 / Quick Actions]
+          
+          C --> C1[创建新提示词 / Create New]
+          C --> C2[编辑提示词 / Edit Prompt]
+          
+          D --> D1[已收藏内容 / Saved Content]
+          D --> D2[收藏分类 / Categories]
+          
+          E --> E1[已发布内容 / Published Content]
+          E --> E2[草稿箱 / Drafts]
+          
+          F --> F1[个人资料 / Profile]
+          F --> F2[设置 / Settings]
+          F --> F3[帮助 / Help]
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">用户旅程 / User Journey</h2>
+      <div class="mermaid">
+        journey
+          title 新用户首次使用旅程 / New User First-Time Journey
+          section 发现阶段 / Discovery
+            访问首页: 5: 用户
+            浏览内容: 4: 用户
+            点击帖子: 5: 用户
+          section 体验阶段 / Experience
+            阅读内容: 5: 用户
+            尝试投票: 4: 用户
+            收藏内容: 5: 用户
+          section 参与阶段 / Engagement
+            创建账号: 3: 用户
+            发布内容: 4: 用户
+            获得反馈: 5: 用户
+          section 留存阶段 / Retention
+            定期访问: 5: 用户
+            持续互动: 4: 用户
+            推荐他人: 5: 用户
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">页面层级关系 / Page Hierarchy</h2>
+      <div class="mermaid">
+        graph TD
+          A[首页 / Home] --> B[帖子详情 / Post Detail]
+          A --> C[分享提示词 / Share Prompt]
+          A --> D[我的收藏 / Bookmarks]
+          A --> E[我的发布 / My Posts]
+          
+          B --> F[投票 / Voting]
+          B --> G[评论 / Comments]
+          B --> H[分享 / Share]
+          
+          C --> I[表单验证 / Form Validation]
+          C --> J[预览 / Preview]
+          C --> K[发布 / Publish]
+          
+          D --> L[筛选 / Filter]
+          D --> M[搜索 / Search]
+          
+          E --> N[编辑 / Edit]
+          E --> O[删除 / Delete]
+          E --> P[统计 / Analytics]
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">组件架构 / Component Architecture</h2>
+      <div class="component-tree">
+        <div class="level-0">AI Community MVP v2</div>
+        <div class="level-1">📱 App Layout</div>
+        <div class="level-2">├── Header / 头部</div>
+        <div class="level-3">│   ├── Logo / 品牌标识</div>
+        <div class="level-3">│   ├── SearchBar / 搜索框</div>
+        <div class="level-3">│   └── UserMenu / 用户菜单</div>
+        <div class="level-2">├── Sidebar / 侧边栏</div>
+        <div class="level-3">│   ├── Navigation / 导航菜单</div>
+        <div class="level-3">│   ├── QuickActions / 快速操作</div>
+        <div class="level-3">│   └── Recommendations / 推荐内容</div>
+        <div class="level-2">└── Main Content / 主要内容</div>
+        <div class="level-3">    ├── HomePage / 首页</div>
+        <div class="level-3">    │   ├── WelcomeCard / 欢迎卡片</div>
+        <div class="level-3">    │   ├── TrendingSection / 趋势区域</div>
+        <div class="level-3">    │   └── Feed / 动态流</div>
+        <div class="level-3">    ├── PostDetail / 帖子详情</div>
+        <div class="level-3">    │   ├── PostHeader / 帖子头部</div>
+        <div class="level-3">    │   ├── PostContent / 帖子内容</div>
+        <div class="level-3">    │   ├── VotingDisplay / 投票组件</div>
+        <div class="level-3">    │   └── CommentsSection / 评论区</div>
+        <div class="level-3">    ├── SharePrompt / 分享提示词</div>
+        <div class="level-3">    │   ├── SharePromptForm / 分享表单</div>
+        <div class="level-3">    │   ├── Preview / 预览</div>
+        <div class="level-3">    │   └── Validation / 验证</div>
+        <div class="level-3">    ├── Bookmarks / 我的收藏</div>
+        <div class="level-3">    │   ├── Filter / 筛选</div>
+        <div class="level-3">    │   └── BookmarkList / 收藏列表</div>
+        <div class="level-3">    └── MyPosts / 我的发布</div>
+        <div class="level-3">        ├── PostList / 帖子列表</div>
+        <div class="level-3">        └── Analytics / 统计</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">关键用户流程 / Key User Flows</h2>
+      <div class="flow-step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <div class="step-title">发现内容 / Content Discovery</div>
+          <div class="step-desc">用户进入首页，浏览动态流和趋势内容，发现感兴趣的帖子</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <div class="step-title">阅读与评估 / Read & Evaluate</div>
+          <div class="step-desc">点击帖子查看详情，阅读内容，评估质量和实用性</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <div class="step-title">互动参与 / Interactive Engagement</div>
+          <div class="step-desc">对内容进行投票、收藏、评论，参与社区讨论</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <div class="step-title">内容创作 / Content Creation</div>
+          <div class="step-desc">创建和发布自己的提示词内容，分享给社区</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-number">5</div>
+        <div class="step-content">
+          <div class="step-title">持续参与 / Continuous Engagement</div>
+          <div class="step-desc">定期访问，管理个人内容，持续参与社区活动</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">设计系统 / Design System</h2>
+      <h3>颜色系统 / Color System</h3>
+      <div class="color-palette">
+        <div class="color-item">
+          <div class="color-swatch" style="background: #3B82F6;"></div>
+          <div class="color-info">
+            <h4>Primary Blue</h4>
+            <p>#3B82F6</p>
+          </div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background: #10B981;"></div>
+          <div class="color-info">
+            <h4>Success Green</h4>
+            <p>#10B981</p>
+          </div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background: #F59E0B;"></div>
+          <div class="color-info">
+            <h4>Warning Amber</h4>
+            <p>#F59E0B</p>
+          </div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background: #EF4444;"></div>
+          <div class="color-info">
+            <h4>Error Red</h4>
+            <p>#EF4444</p>
+          </div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background: #111827;"></div>
+          <div class="color-info">
+            <h4>Text Primary</h4>
+            <p>#111827</p>
+          </div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background: #6B7280;"></div>
+          <div class="color-info">
+            <h4>Text Secondary</h4>
+            <p>#6B7280</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">响应式设计 / Responsive Design</h2>
+      <div class="responsive-demo">
+        <div class="device-frame">
+          <h4>📱 Mobile (320px-768px)</h4>
+          <div class="device-preview">
+            <div style="text-align: left;">
+              <div style="background: #f3f4f6; padding: 8px; margin-bottom: 8px; border-radius: 4px;">Header</div>
+              <div style="background: #e5e7eb; padding: 8px; margin-bottom: 8px; border-radius: 4px;">Single Column</div>
+              <div style="background: #e5e7eb; padding: 8px; border-radius: 4px;">Content</div>
+            </div>
+          </div>
+        </div>
+        <div class="device-frame">
+          <h4>📱 Tablet (768px-1024px)</h4>
+          <div class="device-preview">
+            <div style="text-align: left;">
+              <div style="background: #f3f4f6; padding: 8px; margin-bottom: 8px; border-radius: 4px;">Header</div>
+              <div style="display: flex; gap: 8px;">
+                <div style="background: #e5e7eb; padding: 8px; flex: 1; border-radius: 4px;">Sidebar</div>
+                <div style="background: #e5e7eb; padding: 8px; flex: 2; border-radius: 4px;">Content</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="device-frame">
+          <h4>💻 Desktop (1024px+)</h4>
+          <div class="device-preview">
+            <div style="text-align: left;">
+              <div style="background: #f3f4f6; padding: 8px; margin-bottom: 8px; border-radius: 4px;">Header</div>
+              <div style="display: flex; gap: 8px;">
+                <div style="background: #e5e7eb; padding: 8px; flex: 1; border-radius: 4px;">Sidebar</div>
+                <div style="background: #e5e7eb; padding: 8px; flex: 3; border-radius: 4px;">Main Content</div>
+                <div style="background: #e5e7eb; padding: 8px; flex: 1; border-radius: 4px;">Right Panel</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">交互模式 / Interaction Patterns</h2>
+      <div class="mermaid">
+        graph LR
+          A[用户操作 / User Action] --> B{操作类型 / Action Type}
+          B -->|点击 / Click| C[导航跳转 / Navigation]
+          B -->|悬停 / Hover| D[状态反馈 / State Feedback]
+          B -->|输入 / Input| E[实时验证 / Real-time Validation]
+          B -->|拖拽 / Drag| F[排序重排 / Reorder]
+          
+          C --> G[页面切换 / Page Transition]
+          D --> H[视觉提示 / Visual Cue]
+          E --> I[错误提示 / Error Message]
+          F --> J[位置更新 / Position Update]
+          
+          G --> K[加载状态 / Loading State]
+          H --> L[交互反馈 / Interaction Feedback]
+          I --> M[修正建议 / Correction Suggestion]
+          J --> N[数据同步 / Data Sync]
+      </div>
+    </section>
+
+    <footer style="text-align: center; padding: 40px 0; border-top: 1px solid var(--line); margin-top: 60px; color: var(--muted);">
+      <p>© 2025 Designer: Qingyu Cao — AI Community MVP v2 • UI/UX Information Architecture</p>
+    </footer>
+  </div>
+
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        primaryColor: '#3B82F6',
+        primaryTextColor: '#E7E9EE',
+        primaryBorderColor: '#2A2F3A',
+        lineColor: '#8B90A0',
+        secondaryColor: '#111319',
+        tertiaryColor: '#0B0C0F'
+      }
+    });
+  </script>
+</body>
+</html>
