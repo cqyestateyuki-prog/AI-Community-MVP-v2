@@ -22,6 +22,10 @@ export default function VotingDisplay({ post, onVoteSubmitted }: VotingDisplayPr
   const [showVoteModal, setShowVoteModal] = useState(false); // 投票弹窗显示状态
   const [showTipModal, setShowTipModal] = useState(false); // 打赏弹窗显示状态
   const [tipSent, setTipSent] = useState(false); // 打赏是否已发送
+  
+  // 检查用户是否已投票
+  // Check if user has already voted
+  const hasUserVoted = storage.hasUserVoted(post.id, storage.getCurrentUser().name);
 
   // 处理投票提交 - 调用存储服务提交投票数据
   // Handle vote submission - Call storage service to submit vote data
@@ -146,17 +150,22 @@ export default function VotingDisplay({ post, onVoteSubmitted }: VotingDisplayPr
       <div className="flex items-center space-x-2 mb-4 text-sm">
         <TrendingUp className="w-4 h-4 text-green-600" />
         <span className="text-green-600 font-medium">Trending:</span>
-        <span className="text-gray-600">+{Math.floor(Math.random() * 20) + 5} votes this week</span>
+        <span className="text-gray-600">+{votingStats.totalVotes} total votes</span>
       </div>
 
       {/* Action Buttons */}
       <div className="flex space-x-3">
         <button
           onClick={() => setShowVoteModal(true)}
-          className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          disabled={hasUserVoted}
+          className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
+            hasUserVoted 
+              ? 'bg-gray-400 text-gray-200 cursor-not-allowed' 
+              : 'bg-blue-600 text-white hover:bg-blue-700'
+          }`}
         >
           <ThumbsUp className="w-4 h-4" />
-          <span>Vote</span>
+          <span>{hasUserVoted ? 'Already Voted' : 'Vote'}</span>
         </button>
         <button
           onClick={() => {
