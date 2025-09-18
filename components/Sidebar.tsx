@@ -119,7 +119,9 @@ export default function Sidebar({}: SidebarProps) {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-black truncate">{user.name}</p>
-            <p className="text-xs text-gray-500">{user.aiCoins} AI Coins</p>
+            <p className="text-xs text-gray-500">
+              {mounted ? `${user.aiCoins} AI Coins` : '100 AI Coins'}
+            </p>
           </div>
         </div>
       </div>

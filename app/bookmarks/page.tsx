@@ -10,8 +10,10 @@ import AppLayout from '../../components/AppLayout';
 export default function BookmarksPage() {
   const [bookmarkedPosts, setBookmarkedPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const posts = storage.getBookmarkedPosts();
     setBookmarkedPosts(posts);
     setLoading(false);
@@ -82,7 +84,9 @@ export default function BookmarksPage() {
               <div className="text-sm text-gray-600">Bookmarked Posts</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-black">{storage.getCurrentUser().aiCoins}</div>
+              <div className="text-2xl font-bold text-black">
+                {mounted ? storage.getCurrentUser().aiCoins : 100}
+              </div>
               <div className="text-sm text-gray-600">AI Coins</div>
             </div>
           </div>
