@@ -128,10 +128,20 @@ class StorageService {
       return;
     }
     
-    // 首次初始化数据
-    // Initialize data for the first time
-    console.log('Initializing data with', initialPosts.length, 'posts');
-    localStorage.setItem(this.POSTS_KEY, JSON.stringify(initialPosts));
+    // 首次初始化 - 只设置用户数据，不添加示例帖子
+    // First initialization - only set user data, no sample posts
+    console.log('Initializing empty state for new user');
+    localStorage.setItem(this.POSTS_KEY, JSON.stringify([])); // 空帖子数组
+    localStorage.setItem(this.USER_KEY, JSON.stringify({
+      id: 'demo_user',
+      name: 'Demo User',
+      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=DemoUser',
+      aiCoins: 100,
+      bookmarkedPosts: [],
+      publishedPosts: [],
+      createdAt: new Date().toISOString(),
+    }));
+    localStorage.setItem(this.VOTES_KEY, JSON.stringify([]));
     localStorage.setItem(this.INIT_KEY, 'true');
   }
 
@@ -270,7 +280,7 @@ class StorageService {
         id: 'demo_user',
         name: 'Demo User',
         avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=DemoUser',
-        aiCoins: 247,
+        aiCoins: 100,
         bookmarkedPosts: [],
         publishedPosts: [],
         createdAt: new Date().toISOString(),
@@ -282,11 +292,30 @@ class StorageService {
       id: 'demo_user',
       name: 'Demo User',
       avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=DemoUser',
-      aiCoins: 247,
+      aiCoins: 100,
       bookmarkedPosts: [],
       publishedPosts: [],
       createdAt: new Date().toISOString(),
     };
+  }
+
+  // 重置所有数据到空状态
+  resetToEmptyState(): void {
+    if (typeof window === 'undefined') return;
+    
+    console.log('Resetting to empty state');
+    localStorage.setItem(this.POSTS_KEY, JSON.stringify([]));
+    localStorage.setItem(this.USER_KEY, JSON.stringify({
+      id: 'demo_user',
+      name: 'Demo User',
+      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=DemoUser',
+      aiCoins: 100,
+      bookmarkedPosts: [],
+      publishedPosts: [],
+      createdAt: new Date().toISOString(),
+    }));
+    localStorage.setItem(this.VOTES_KEY, JSON.stringify([]));
+    localStorage.setItem(this.INIT_KEY, 'true');
   }
 
   // 设置用户信息
