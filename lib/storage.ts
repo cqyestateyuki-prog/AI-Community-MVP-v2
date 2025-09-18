@@ -361,16 +361,15 @@ class StorageService {
   getUserPublishedPosts(): Post[] {
     const user = this.getCurrentUser();
     const allPosts = this.getPosts();
-    return allPosts.filter(post => user.publishedPosts.includes(post.id));
+    // 根据作者名称过滤，而不是根据publishedPosts数组
+    return allPosts.filter(post => post.author.name === user.name);
   }
 
   // 添加用户发布的帖子
   addUserPublishedPost(postId: string) {
-    const user = this.getCurrentUser();
-    if (!user.publishedPosts.includes(postId)) {
-      user.publishedPosts.push(postId);
-      this.setCurrentUser(user);
-    }
+    // 这个方法现在不需要做任何事情，因为getUserPublishedPosts()直接根据作者名称过滤
+    // 当用户创建新帖子时，帖子的author.name会自动设置为当前用户名
+    console.log('Post added by user:', this.getCurrentUser().name);
   }
 
   // 更新AI Coins
