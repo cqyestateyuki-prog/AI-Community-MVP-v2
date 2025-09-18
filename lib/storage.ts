@@ -418,19 +418,40 @@ class StorageService {
     
     const votes = this.getPostVotes(postId);
     
-    // 如果没有投票，保持原有统计
+    // 获取原有投票统计作为基础
+    const existingStats = post.votingStats || {
+      totalVotes: 0,
+      effectiveness: 0,
+      workedPerfectly: 0,
+      workedWithTweaks: 0,
+      partiallyHelpful: 0,
+      didntWork: 0,
+      successRate: 0
+    };
+    
+    // 如果没有新投票，保持原有统计
     if (votes.length === 0) {
       return post;
     }
     
-    // 基于所有投票重新计算统计
-    const totalVotes = votes.length;
-    const effectiveness = votes.reduce((sum, vote) => sum + vote.effectiveness, 0) / totalVotes;
+    // 计算新投票的统计
+    const newVotes = votes;
+    const newTotalVotes = newVotes.length;
+    const newEffectiveness = newVotes.reduce((sum, vote) => sum + vote.effectiveness, 0) / newTotalVotes;
     
-    const workedPerfectly = votes.filter(v => v.effectiveness === 5).length;
-    const workedWithTweaks = votes.filter(v => v.effectiveness === 4).length;
-    const partiallyHelpful = votes.filter(v => v.effectiveness === 3).length;
-    const didntWork = votes.filter(v => v.effectiveness <= 2).length;
+    const newWorkedPerfectly = newVotes.filter(v => v.effectiveness === 5).length;
+    const newWorkedWithTweaks = newVotes.filter(v => v.effectiveness === 4).length;
+    const newPartiallyHelpful = newVotes.filter(v => v.effectiveness === 3).length;
+    const newDidntWork = newVotes.filter(v => v.effectiveness <= 2).length;
+    
+    // 合并原有统计和新投票统计
+    const totalVotes = existingStats.totalVotes + newTotalVotes;
+    const effectiveness = ((existingStats.effectiveness * existingStats.totalVotes) + (newEffectiveness * newTotalVotes)) / totalVotes;
+    
+    const workedPerfectly = existingStats.workedPerfectly + newWorkedPerfectly;
+    const workedWithTweaks = existingStats.workedWithTweaks + newWorkedWithTweaks;
+    const partiallyHelpful = existingStats.partiallyHelpful + newPartiallyHelpful;
+    const didntWork = existingStats.didntWork + newDidntWork;
     
     const successRate = ((workedPerfectly + workedWithTweaks) / totalVotes) * 100;
     
