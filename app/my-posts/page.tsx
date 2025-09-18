@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ArrowLeft, Edit, Star, Heart, MessageCircle, Code, MessageSquare, Calendar } from 'lucide-react';
 import storage, { type Post } from '@/lib/storage';
 import { formatDistanceToNow } from 'date-fns';
+import AppLayout from '../../components/AppLayout';
 
 export default function MyPostsPage() {
   const [myPosts, setMyPosts] = useState<Post[]>([]);
@@ -54,8 +55,9 @@ export default function MyPostsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto p-6">
+    <AppLayout>
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-4xl mx-auto p-6">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
           <Link href="/">
@@ -210,7 +212,8 @@ export default function MyPostsPage() {
             })}
           </div>
         )}
+        </div>
       </div>
-    </div>
+    </AppLayout>
   );
 }
