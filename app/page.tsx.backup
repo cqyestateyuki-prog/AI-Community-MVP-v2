@@ -1,5 +1,14 @@
 'use client';
 
+/**
+ * AI Community MVP v2
+ * Copyright (c) 2025 Designer: Qingyu Cao
+ * All rights reserved.
+ * 
+ * Commercial use permitted under MIT License
+ * For commercial licensing, contact: cqyestateyuki@gmail.com
+ */
+
 // 首页组件 - AI社区的主入口页面
 // Homepage Component - Main entry page for AI Community
 

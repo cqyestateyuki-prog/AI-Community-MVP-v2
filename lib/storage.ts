@@ -120,9 +120,17 @@ class StorageService {
   private initializeData() {
     if (typeof window === 'undefined') return; // 服务端渲染时跳过
     
-    // 强制重新初始化数据（清除旧数据）
-    // Force reinitialize data (clear old data)
-    console.log('Force initializing data with', initialPosts.length, 'posts');
+    // 检查是否已经初始化过，避免覆盖用户数据
+    // Check if already initialized to avoid overwriting user data
+    const isInitialized = localStorage.getItem(this.INIT_KEY);
+    if (isInitialized) {
+      console.log('Data already initialized, preserving user data');
+      return;
+    }
+    
+    // 首次初始化数据
+    // Initialize data for the first time
+    console.log('Initializing data with', initialPosts.length, 'posts');
     localStorage.setItem(this.POSTS_KEY, JSON.stringify(initialPosts));
     localStorage.setItem(this.INIT_KEY, 'true');
   }

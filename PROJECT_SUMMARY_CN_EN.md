@@ -2,9 +2,9 @@
 
 ## 🎯 项目概述 / Project Overview
 
-AI Community MVP v2 是一个现代化的AI社区平台，专注于AI对话分享、提示词工程和社区活动。项目采用 Next.js 14 + TypeScript + Tailwind CSS 技术栈，实现了完整的社区功能，包括多类型发帖、智能搜索、投票系统、个性化体验等。
+AI Community MVP v2 是一个现代化的AI社区平台，专注于AI对话分享、提示词工程和社区活动。项目采用 Next.js 14 + TypeScript + Tailwind CSS 技术栈，实现了完整的社区功能，包括多类型发帖、智能搜索和热门搜索、投票系统、个性化体验等。
 
-AI Community MVP v2 is a modern AI community platform focused on AI conversation sharing, prompt engineering, and community events. The project uses Next.js 14 + TypeScript + Tailwind CSS tech stack, implementing complete community features including multi-type posting, smart search, voting system, and personalized experience.
+AI Community MVP v2 is a modern AI community platform focused on AI conversation sharing, prompt engineering, and community events. The project uses Next.js 14 + TypeScript + Tailwind CSS tech stack, implementing complete community features including multi-type posting, smart search and trending search, voting system, and personalized experience.
 
 ## ✨ 核心成就 / Core Achievements
 
