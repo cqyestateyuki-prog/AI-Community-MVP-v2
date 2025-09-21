@@ -182,15 +182,10 @@ export default function MyPostsPage() {
                         
                         {/* 操作按钮 */}
                         <div className="flex items-center gap-2">
-                          <Link href={`/post/${post.id}`}>
-                            <button className="px-3 py-1 text-sm text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded transition-colors">
-                              查看
-                            </button>
-                          </Link>
                           <button
                             onClick={() => setShowDeleteConfirm(post.id)}
                             className="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-colors"
-                            title="删除帖子"
+                            title="Delete post"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -250,7 +245,7 @@ export default function MyPostsPage() {
         </div>
       </div>
 
-      {/* 删除确认弹窗 */}
+      {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg max-w-md w-full p-6">
@@ -259,13 +254,13 @@ export default function MyPostsPage() {
                 <Trash2 className="w-5 h-5 text-red-600" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-900">删除帖子</h3>
-                <p className="text-sm text-gray-600">此操作无法撤销</p>
+                <h3 className="text-lg font-semibold text-gray-900">Delete Post</h3>
+                <p className="text-sm text-gray-600">This action cannot be undone</p>
               </div>
             </div>
             
             <p className="text-gray-700 mb-6">
-              确定要删除这个帖子吗？删除后，所有相关的投票、评论和收藏数据都将被永久删除。
+              Are you sure you want to delete this post? All related votes, comments, and bookmarks will be permanently deleted.
             </p>
             
             <div className="flex gap-3 justify-end">
@@ -273,13 +268,13 @@ export default function MyPostsPage() {
                 onClick={() => setShowDeleteConfirm(null)}
                 className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
               >
-                取消
+                Cancel
               </button>
               <button
                 onClick={() => handleDeletePost(showDeleteConfirm)}
                 className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
               >
-                删除
+                Delete
               </button>
             </div>
           </div>
