@@ -125,6 +125,22 @@ class StorageService {
     const isInitialized = localStorage.getItem(this.INIT_KEY);
     if (isInitialized) {
       console.log('Data already initialized, preserving user data');
+      
+      // 确保用户有正确的AI Coins数量（如果用户数据存在但AI Coins异常，重置为100）
+      // Ensure user has correct AI Coins amount (reset to 100 if user data exists but AI Coins is abnormal)
+      const userData = localStorage.getItem(this.USER_KEY);
+      if (userData) {
+        try {
+          const user = JSON.parse(userData);
+          if (user.aiCoins && user.aiCoins > 1000) {
+            console.log('Resetting abnormal AI Coins to 100');
+            user.aiCoins = 100;
+            localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+          }
+        } catch (error) {
+          console.error('Error checking user AI Coins:', error);
+        }
+      }
       return;
     }
     
@@ -399,6 +415,24 @@ class StorageService {
     const user = this.getCurrentUser();
     user.aiCoins = 100;
     this.setCurrentUser(user);
+  }
+
+  // 强制重置AI Coins到100（用于修复异常数据）
+  // Force reset AI Coins to 100 (for fixing abnormal data)
+  forceResetAICoins(): void {
+    if (typeof window === 'undefined') return;
+    
+    const userData = localStorage.getItem(this.USER_KEY);
+    if (userData) {
+      try {
+        const user = JSON.parse(userData);
+        user.aiCoins = 100;
+        localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+        console.log('AI Coins force reset to 100');
+      } catch (error) {
+        console.error('Error force resetting AI Coins:', error);
+      }
+    }
   }
 
   // 投票功能（用于prompt_sharing类型）

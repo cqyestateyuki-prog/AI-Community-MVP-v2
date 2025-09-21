@@ -13,7 +13,7 @@ interface SidebarProps {
 export default function Sidebar({}: SidebarProps) {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
-  const [user, setUser] = useState({ name: 'Demo User', aiCoins: 247 });
+  const [user, setUser] = useState({ name: 'Demo User', aiCoins: 100 });
   const [bookmarkCount, setBookmarkCount] = useState(0);
   const [postCount, setPostCount] = useState(0);
 
