@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Edit, Star, Heart, MessageCircle, Code, MessageSquare, Calendar } from 'lucide-react';
+import { ArrowLeft, Edit, Star, Heart, MessageCircle, Code, MessageSquare, Calendar, Trash2 } from 'lucide-react';
 import storage, { type Post } from '@/lib/storage';
 import { formatDistanceToNow } from 'date-fns';
 import AppLayout from '../../components/AppLayout';
@@ -11,6 +11,7 @@ export default function MyPostsPage() {
   const [myPosts, setMyPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -18,6 +19,16 @@ export default function MyPostsPage() {
     setMyPosts(posts);
     setLoading(false);
   }, []);
+
+  // 删除帖子
+  const handleDeletePost = (postId: string) => {
+    const success = storage.deletePost(postId);
+    if (success) {
+      // 更新本地状态
+      setMyPosts(prev => prev.filter(post => post.id !== postId));
+      setShowDeleteConfirm(null);
+    }
+  };
 
   const getPostTypeInfo = (type: string) => {
     switch (type) {
@@ -150,15 +161,15 @@ export default function MyPostsPage() {
             {myPosts.map(post => {
               const typeInfo = getPostTypeInfo(post.type);
               return (
-                <Link key={post.id} href={`/post/${post.id}`}>
-                  <div className="bg-white border border-gray-300 rounded-lg p-6 hover:shadow-sm transition-shadow">
-                    <div className="flex items-start gap-4">
-                      {/* Author Avatar */}
-                      <div className="w-10 h-10 bg-gray-200 rounded-full flex-shrink-0" />
-                      
-                      {/* Content */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-2">
+                <div key={post.id} className="bg-white border border-gray-300 rounded-lg p-6 hover:shadow-sm transition-shadow">
+                  <div className="flex items-start gap-4">
+                    {/* Author Avatar */}
+                    <div className="w-10 h-10 bg-gray-200 rounded-full flex-shrink-0" />
+                    
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
                           <span className="text-sm text-gray-500">{post.author.name}</span>
                           <span className="text-xs text-gray-400">•</span>
                           <span className="text-xs text-gray-500">
@@ -169,55 +180,111 @@ export default function MyPostsPage() {
                           </span>
                         </div>
                         
-                        <h3 className="text-lg font-semibold text-black mb-2 line-clamp-2">
-                          {post.title}
-                        </h3>
-                        
-                        {post.intro && (
-                          <p className="text-gray-600 text-sm mb-3 line-clamp-2">
-                            {post.intro}
-                          </p>
-                        )}
-
-                        {/* Tags */}
-                        <div className="flex flex-wrap gap-2 mb-3">
-                          {post.tags.slice(0, 3).map(tag => (
-                            <span
-                              key={tag}
-                              className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-
-                        {/* Stats */}
-                        <div className="flex items-center gap-4 text-sm text-gray-500">
-                          <div className="flex items-center gap-1">
-                            <Heart className="w-4 h-4 text-red-500" />
-                            <span>{post.likes}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <MessageCircle className="w-4 h-4 text-gray-500" />
-                            <span>{post.comments.length}</span>
-                          </div>
-                          {post.type === 'prompt_sharing' && post.votingStats && (
-                            <div className="flex items-center gap-1">
-                              <span className="text-lg">🏆</span>
-                              <span>{post.votingStats.totalVotes} votes</span>
-                            </div>
-                          )}
+                        {/* 操作按钮 */}
+                        <div className="flex items-center gap-2">
+                          <Link href={`/post/${post.id}`}>
+                            <button className="px-3 py-1 text-sm text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded transition-colors">
+                              查看
+                            </button>
+                          </Link>
+                          <button
+                            onClick={() => setShowDeleteConfirm(post.id)}
+                            className="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-colors"
+                            title="删除帖子"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
                         </div>
                       </div>
+                      
+                      <Link href={`/post/${post.id}`}>
+                        <div className="cursor-pointer">
+                          <h3 className="text-lg font-semibold text-black mb-2 line-clamp-2">
+                            {post.title}
+                          </h3>
+                          
+                          {post.intro && (
+                            <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                              {post.intro}
+                            </p>
+                          )}
+
+                          {/* Tags */}
+                          <div className="flex flex-wrap gap-2 mb-3">
+                            {post.tags.slice(0, 3).map(tag => (
+                              <span
+                                key={tag}
+                                className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+
+                          {/* Stats */}
+                          <div className="flex items-center gap-4 text-sm text-gray-500">
+                            <div className="flex items-center gap-1">
+                              <Heart className="w-4 h-4 text-red-500" />
+                              <span>{post.likes}</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <MessageCircle className="w-4 h-4 text-gray-500" />
+                              <span>{post.comments.length}</span>
+                            </div>
+                            {post.type === 'prompt_sharing' && post.votingStats && (
+                              <div className="flex items-center gap-1">
+                                <span className="text-lg">🏆</span>
+                                <span>{post.votingStats.totalVotes} votes</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </Link>
                     </div>
                   </div>
-                </Link>
+                </div>
               );
             })}
           </div>
         )}
         </div>
       </div>
+
+      {/* 删除确认弹窗 */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-md w-full p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                <Trash2 className="w-5 h-5 text-red-600" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">删除帖子</h3>
+                <p className="text-sm text-gray-600">此操作无法撤销</p>
+              </div>
+            </div>
+            
+            <p className="text-gray-700 mb-6">
+              确定要删除这个帖子吗？删除后，所有相关的投票、评论和收藏数据都将被永久删除。
+            </p>
+            
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => setShowDeleteConfirm(null)}
+                className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+              >
+                取消
+              </button>
+              <button
+                onClick={() => handleDeletePost(showDeleteConfirm)}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+              >
+                删除
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </AppLayout>
   );
 }
