@@ -393,6 +393,14 @@ class StorageService {
     this.setCurrentUser(user);
   }
 
+  // 重置用户AI Coins到100
+  // Reset user AI Coins to 100
+  resetUserCoins(): void {
+    const user = this.getCurrentUser();
+    user.aiCoins = 100;
+    this.setCurrentUser(user);
+  }
+
   // 投票功能（用于prompt_sharing类型）
   votePrompt(postId: string): Post | null {
     const post = this.getPost(postId);

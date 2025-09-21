@@ -22,6 +22,8 @@ export default function VotingDisplay({ post, onVoteSubmitted }: VotingDisplayPr
   const [showVoteModal, setShowVoteModal] = useState(false); // 投票弹窗显示状态
   const [showTipModal, setShowTipModal] = useState(false); // 打赏弹窗显示状态
   const [tipSent, setTipSent] = useState(false); // 打赏是否已发送
+  const [selectedTipAmount, setSelectedTipAmount] = useState<number>(0); // 选中的打赏金额
+  const [customTipAmount, setCustomTipAmount] = useState<string>(''); // 自定义打赏金额
   
   // 检查用户是否已投票
   // Check if user has already voted
@@ -52,6 +54,37 @@ export default function VotingDisplay({ post, onVoteSubmitted }: VotingDisplayPr
     } catch (error) {
       console.error('Error submitting vote:', error);
     }
+  };
+
+  // 处理打赏提交 - 扣除AI Coins并显示成功消息
+  // Handle tip submission - Deduct AI Coins and show success message
+  const handleTipSubmit = () => {
+    const tipAmount = selectedTipAmount || parseInt(customTipAmount) || 0;
+    const currentUser = storage.getCurrentUser();
+    
+    if (tipAmount <= 0) {
+      alert('Please select a valid tip amount');
+      return;
+    }
+    
+    if (currentUser.aiCoins < tipAmount) {
+      alert('Insufficient AI Coins');
+      return;
+    }
+    
+    // 扣除AI Coins
+    storage.updateAICoins(-tipAmount);
+    
+    // 显示成功消息
+    setTipSent(true);
+    setShowTipModal(false);
+    setSelectedTipAmount(0);
+    setCustomTipAmount('');
+    
+    // 3秒后隐藏成功消息
+    setTimeout(() => {
+      setTipSent(false);
+    }, 3000);
   };
 
   if (!post.votingStats) {
@@ -221,6 +254,11 @@ export default function VotingDisplay({ post, onVoteSubmitted }: VotingDisplayPr
                     type="radio"
                     name="tipAmount"
                     value={tip.amount}
+                    checked={selectedTipAmount === tip.amount}
+                    onChange={() => {
+                      setSelectedTipAmount(tip.amount);
+                      setCustomTipAmount('');
+                    }}
                     className="mt-1"
                   />
                   <div className="flex-1">
@@ -238,6 +276,11 @@ export default function VotingDisplay({ post, onVoteSubmitted }: VotingDisplayPr
                 <input
                   type="radio"
                   name="tipAmount"
+                  checked={selectedTipAmount === 0 && customTipAmount !== ''}
+                  onChange={() => {
+                    setSelectedTipAmount(0);
+                    setCustomTipAmount('');
+                  }}
                   className="mt-1"
                 />
                 <div className="flex-1">
@@ -245,6 +288,11 @@ export default function VotingDisplay({ post, onVoteSubmitted }: VotingDisplayPr
                   <input
                     type="number"
                     placeholder="Enter AI Coins"
+                    value={customTipAmount}
+                    onChange={(e) => {
+                      setCustomTipAmount(e.target.value);
+                      setSelectedTipAmount(0);
+                    }}
                     className="ml-2 w-24 p-1 border border-gray-300 rounded text-sm"
                     min="1"
                   />
@@ -267,11 +315,7 @@ export default function VotingDisplay({ post, onVoteSubmitted }: VotingDisplayPr
                 Cancel
               </button>
               <button
-                onClick={() => {
-                  setTipSent(true);
-                  setShowTipModal(false);
-                  setTimeout(() => setTipSent(false), 3000);
-                }}
+                onClick={handleTipSubmit}
                 className="flex-1 px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600"
               >
                 Send Tip
