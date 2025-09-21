@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Community MVP v2 - Information Architecture / 信息架构</title>
+  <style>
+    :root { --bg:#0b0c0f; --panel:#111319; --muted:#8b90a0; --text:#e7e9ee; --accent:#7dd3fc; --line:#2a2f3a; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji"; background: var(--bg); color: var(--text); }
+    header { padding: 28px 24px; border-bottom: 1px solid var(--line); background: linear-gradient(180deg, #0e1116, #0b0c0f); position: sticky; top:0; z-index: 10; }
+    h1 { margin:0; font-size: 20px; letter-spacing: .4px; }
+    main { display: grid; grid-template-columns: 340px 1fr; gap: 16px; padding: 20px; }
+    @media (max-width: 980px) { main { grid-template-columns: 1fr; } }
+    .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+    .panel h2 { margin: 0; padding: 14px 16px; font-size: 16px; border-bottom: 1px solid var(--line); background: #0f1117; }
+    .panel .content { padding: 14px 16px; }
+    .muted { color: var(--muted); }
+    .pill { display:inline-block; padding: 2px 8px; border:1px solid var(--line); border-radius: 999px; font-size: 12px; color: var(--muted); }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    ul.tree, ul.tree ul { list-style: none; margin: 0; padding-left: 16px; }
+    ul.tree li { position: relative; padding-left: 14px; margin: 6px 0; }
+    ul.tree li::before { content: ""; position: absolute; left: 0; top: 10px; width: 8px; height: 1px; background: var(--line); }
+    code { background: #0d0f14; padding: 2px 6px; border-radius: 6px; border: 1px solid var(--line); color: #d0d5e2; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; }
+    @media (max-width: 1200px) { .grid { grid-template-columns: 1fr; } }
+    .kv { display:grid; grid-template-columns: 180px 1fr; gap:10px; align-items:start; }
+    .tag { display:inline-block; background:#0d121a; border:1px solid var(--line); color:#b6c2df; border-radius: 8px; padding: 2px 8px; margin-right:6px; margin-bottom:6px; font-size:12px; }
+    .legend { display:flex; gap:8px; flex-wrap:wrap; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>AI Community MVP v2 — Information Architecture / 信息架构</h1>
+    <div class="muted" style="margin-top:6px;">Bilingual overview of navigation, routes, content types, components, and data flow / 导航、路由、内容类型、组件与数据流双语概览</div>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>Site Map / 站点地图</h2>
+      <div class="content">
+        <div class="legend" style="margin-bottom:10px;">
+          <span class="pill">Page</span>
+          <span class="pill">Dynamic</span>
+          <span class="pill">Client</span>
+          <span class="pill">SSR</span>
+        </div>
+        <ul class="tree">
+          <li><strong>/</strong> <span class="pill">Page</span>
+            <ul>
+              <li><strong>/post/new</strong> <span class="pill">Page</span> <span class="pill">Client</span> — New Post / 新建帖子</li>
+              <li><strong>/post/[id]</strong> <span class="pill">Page</span> <span class="pill">Dynamic</span> — Post Detail / 帖子详情</li>
+              <li><strong>/bookmarks</strong> <span class="pill">Page</span> — My Bookmarks / 我的收藏</li>
+              <li><strong>/my-posts</strong> <span class="pill">Page</span> — My Posts / 我的发布</li>
+              <li><strong>Components</strong>
+                <ul>
+                  <li><code>components/Sidebar.tsx</code> — Navigation / 侧边导航</li>
+                  <li><code>components/PostCard.tsx</code> — Card / 帖子卡片</li>
+                  <li><code>components/VotingDisplay.tsx</code> — Voting UI / 投票展示</li>
+                  <li><code>components/forms/SharePromptForm.tsx</code> — Share Prompt Form / 提示词分享表单</li>
+                </ul>
+              </li>
+              <li><strong>Layouts</strong>
+                <ul>
+                  <li><code>app/(root)/AppLayout</code> — Main Shell / 主布局（含Sidebar）</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <div class="muted" style="margin-top:10px;">Note: Dynamic route <code>/post/[id]</code> is served via SSR on Vercel. / 说明：动态路由<code>/post/[id]</code> 通过 Vercel 的 SSR 提供。</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Content Types / 内容类型</h2>
+      <div class="content grid">
+        <div>
+          <div class="kv"><div>Prompt Sharing / 提示词分享</div><div>
+            <span class="tag">Voting</span><span class="tag">Bookmark</span><span class="tag">Share</span>
+          </div></div>
+          <div class="kv" style="margin-top:10px;"><div>Discussion / 讨论</div><div>
+            <span class="tag">Comments</span><span class="tag">Thread</span>
+          </div></div>
+          <div class="kv" style="margin-top:10px;"><div>Event / 活动</div><div>
+            <span class="tag">Schedule</span><span class="tag">Join</span>
+          </div></div>
+        </div>
+        <div>
+          <div class="kv"><div>User Library / 用户资产</div><div>
+            <span class="tag">My Posts</span><span class="tag">Bookmarks</span><span class="tag">Votes</span>
+          </div></div>
+          <div class="kv" style="margin-top:10px;"><div>Meta</div><div>
+            <span class="tag">Trending</span><span class="tag">Home Feed</span>
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Key Pages & Responsibilities / 关键页面与职责</h2>
+      <div class="content">
+        <ul class="tree">
+          <li><strong>Home `/`</strong>: Feed, trending blocks, quick create / 动态流、趋势、快速创建</li>
+          <li><strong>Share Prompt `/post/new`</strong>: Create prompt, validate, submit / 创建提示词、校验、提交</li>
+          <li><strong>Post Detail `/post/[id]`</strong>: Full content, voting, comments / 全文、投票、评论</li>
+          <li><strong>Bookmarks `/bookmarks`</strong>: User saved posts / 用户收藏</li>
+          <li><strong>My Posts `/my-posts`</strong>: User authored posts / 我的发布</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Primary Navigation / 主导航结构</h2>
+      <div class="content">
+        <ul class="tree">
+          <li>Sidebar
+            <ul>
+              <li>Home / 首页 → <code>/</code></li>
+              <li>Share Prompt / 分享提示词 → <code>/post/new</code></li>
+              <li>My Bookmarks / 我的收藏 → <code>/bookmarks</code></li>
+              <li>My Posts / 我的发布 → <code>/my-posts</code></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Component Map / 组件结构</h2>
+      <div class="content">
+        <ul class="tree">
+          <li><code>app/page.tsx</code>
+            <ul>
+              <li><code>components/Sidebar.tsx</code></li>
+              <li><code>components/PostCard.tsx</code>
+                <ul>
+                  <li><code>components/VotingDisplay.tsx</code></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><code>app/post/new/page.tsx</code>
+            <ul>
+              <li><code>components/forms/SharePromptForm.tsx</code></li>
+            </ul>
+          </li>
+          <li><code>app/bookmarks/page.tsx</code> → <code>AppLayout</code> 包裹 Sidebar</li>
+          <li><code>app/my-posts/page.tsx</code> → <code>AppLayout</code> 包裹 Sidebar</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Data & Storage / 数据与存储</h2>
+      <div class="content">
+        <div class="kv"><div>Storage Service</div><div><code>lib/storage.ts</code> — localStorage-backed; posts, bookmarks, votes, users / 本地存储服务</div></div>
+        <div class="kv" style="margin-top:10px;"><div>Key Entities</div><div>
+          <span class="tag">Post</span>
+          <span class="tag">VotingStats</span>
+          <span class="tag">User</span>
+          <span class="tag">Comment</span>
+        </div></div>
+        <div class="kv" style="margin-top:10px;"><div>Important Behaviors</div><div>
+          <span class="tag">Initialize once (no overwrite)</span>
+          <span class="tag">Update voting via merge</span>
+          <span class="tag">Filter My Posts by author name</span>
+          <span class="tag">Empty-state reset</span>
+        </div></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>User Flows / 用户关键流程</h2>
+      <div class="content">
+        <ol style="margin:0; padding-left:18px;">
+          <li>Discover → Read/Preview → Vote/Bookmark → Revisit / 发现 → 阅读预览 → 投票/收藏 → 复访</li>
+          <li>Create Prompt → Validate → Publish → Feedback → Iterate / 创建提示词 → 校验 → 发布 → 反馈 → 迭代</li>
+          <li>Open My Posts/Bookmarks → Filter & Review / 打开我的发布/收藏 → 筛选与复查</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>URL & IA Mapping / URL与信息架构映射</h2>
+      <div class="content">
+        <table style="width:100%; border-collapse: collapse;">
+          <thead>
+            <tr style="text-align:left; border-bottom:1px solid var(--line);">
+              <th style="padding:8px;">URL</th>
+              <th style="padding:8px;">Page/Module</th>
+              <th style="padding:8px;">Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--line);">
+              <td style="padding:8px;"><code>/</code></td>
+              <td style="padding:8px;">Home</td>
+              <td style="padding:8px;">Discovery, trends, quick entry / 发现、趋势、入口</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--line);">
+              <td style="padding:8px;"><code>/post/new</code></td>
+              <td style="padding:8px;">Share Prompt</td>
+              <td style="padding:8px;">Create and publish prompts / 创建并发布提示词</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--line);">
+              <td style="padding:8px;"><code>/post/[id]</code></td>
+              <td style="padding:8px;">Post Detail</td>
+              <td style="padding:8px;">Read, vote, comment / 阅读、投票、评论</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--line);">
+              <td style="padding:8px;"><code>/bookmarks</code></td>
+              <td style="padding:8px;">Bookmarks</td>
+              <td style="padding:8px;">Personal library / 个人知识库</td>
+            </tr>
+            <tr>
+              <td style="padding:8px;"><code>/my-posts</code></td>
+              <td style="padding:8px;">My Posts</td>
+              <td style="padding:8px;">Author portfolio / 我的作品集</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Notes / 说明</h2>
+      <div class="content">
+        <ul>
+          <li>Voting data accumulates via <code>lib/storage.ts</code> merging strategy; duplicate votes prevented at UI level. / 通过合并策略累积投票，并在UI层阻止重复投票。</li>
+          <li>“我的发布”按作者名过滤，避免历史数组失真。/ My Posts by author-name filter to ensure accuracy.</li>
+          <li>新用户为空状态，不预填示例数据；提供 <em>resetToEmptyState()</em>。/ New users see empty state; reset provided.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer style="padding: 20px; text-align:center; color: var(--muted); border-top:1px solid var(--line); margin-top: 12px;">
+    © 2025 Designer: Qingyu Cao — AI Community MVP v2 • Information Architecture
+  </footer>
+</body>
+</html>
+
+

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Debug AI Coins</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .status {
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+    .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+    .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 10px 5px;
+    }
+    button:hover { background: #0056b3; }
+    .data-display {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 10px 0;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+    .step {
+      background: #e9ecef;
+      padding: 10px;
+      margin: 10px 0;
+      border-left: 4px solid #007bff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔍 Debug AI Coins Issue</h1>
+    
+    <div id="status" class="status info">
+      Click the button below to debug AI Coins issue
+    </div>
+    
+    <div style="text-align: center;">
+      <button onclick="debugAICoins()">Debug AI Coins</button>
+      <button onclick="forceFix()">Force Fix to 100</button>
+      <button onclick="clearAll()">Clear All Data</button>
+      <button onclick="simulateApp()">Simulate App Load</button>
+    </div>
+    
+    <div id="debugInfo" class="data-display"></div>
+  </div>
+
+  <script>
+    function debugAICoins() {
+      let html = '<h3>🔍 AI Coins Debug Report</h3>';
+      
+      // Step 1: Check localStorage
+      html += '<div class="step"><strong>Step 1: Check localStorage</strong></div>';
+      const userData = localStorage.getItem('ai_community_user');
+      if (userData) {
+        try {
+          const user = JSON.parse(userData);
+          html += `User data found: ${JSON.stringify(user, null, 2)}\n`;
+          html += `Current AI Coins: ${user.aiCoins}\n`;
+        } catch (error) {
+          html += `Error parsing user data: ${error.message}\n`;
+        }
+      } else {
+        html += 'No user data found in localStorage\n';
+      }
+      
+      // Step 2: Check all localStorage keys
+      html += '<div class="step"><strong>Step 2: Check all localStorage keys</strong></div>';
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        const value = localStorage.getItem(key);
+        if (key.includes('ai_community')) {
+          html += `${key}: ${value}\n`;
+        }
+      }
+      
+      // Step 3: Check for any hardcoded values in the page
+      html += '<div class="step"><strong>Step 3: Check for hardcoded values in page source</strong></div>';
+      const pageSource = document.documentElement.outerHTML;
+      const matches = pageSource.match(/aiCoins.*[0-9]+|[0-9]+.*aiCoins/gi);
+      if (matches) {
+        html += `Found in page source: ${matches.join(', ')}\n`;
+      } else {
+        html += 'No hardcoded aiCoins values found in page source\n';
+      }
+      
+      // Step 4: Check if there are any scripts that might be setting values
+      html += '<div class="step"><strong>Step 4: Check for any scripts setting values</strong></div>';
+      const scripts = document.querySelectorAll('script');
+      let foundScripts = false;
+      scripts.forEach((script, index) => {
+        if (script.textContent.includes('aiCoins') || script.textContent.includes('247')) {
+          html += `Script ${index} contains aiCoins or 247: ${script.textContent.substring(0, 200)}...\n`;
+          foundScripts = true;
+        }
+      });
+      if (!foundScripts) {
+        html += 'No scripts found setting aiCoins values\n';
+      }
+      
+      document.getElementById('debugInfo').innerHTML = html;
+      showStatus('Debug completed', 'success');
+    }
+    
+    function forceFix() {
+      try {
+        // Force set AI Coins to 100
+        const userData = localStorage.getItem('ai_community_user');
+        if (userData) {
+          const user = JSON.parse(userData);
+          user.aiCoins = 100;
+          localStorage.setItem('ai_community_user', JSON.stringify(user));
+          showStatus('AI Coins force set to 100', 'success');
+        } else {
+          // Create new user with 100 AI Coins
+          const newUser = {
+            id: 'demo_user',
+            name: 'Demo User',
+            avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=DemoUser',
+            aiCoins: 100,
+            bookmarkedPosts: [],
+            publishedPosts: [],
+            createdAt: new Date().toISOString(),
+          };
+          localStorage.setItem('ai_community_user', JSON.stringify(newUser));
+          localStorage.setItem('ai_community_initialized', 'true');
+          showStatus('New user created with 100 AI Coins', 'success');
+        }
+        debugAICoins();
+      } catch (error) {
+        showStatus('Error fixing AI Coins: ' + error.message, 'error');
+      }
+    }
+    
+    function clearAll() {
+      if (confirm('Are you sure you want to clear all data?')) {
+        localStorage.clear();
+        showStatus('All data cleared', 'info');
+        debugAICoins();
+      }
+    }
+    
+    function simulateApp() {
+      // Simulate what the app does on load
+      html = '<h3>🔄 Simulating App Load</h3>';
+      
+      // Check if initialized
+      const isInitialized = localStorage.getItem('ai_community_initialized');
+      html += `Initialized: ${isInitialized}\n`;
+      
+      if (!isInitialized) {
+        html += 'App would initialize with 100 AI Coins\n';
+        // Don't actually initialize, just show what would happen
+      } else {
+        const userData = localStorage.getItem('ai_community_user');
+        if (userData) {
+          const user = JSON.parse(userData);
+          html += `App would load user: ${JSON.stringify(user, null, 2)}\n`;
+        }
+      }
+      
+      document.getElementById('debugInfo').innerHTML = html;
+      showStatus('App simulation completed', 'info');
+    }
+    
+    function showStatus(message, type) {
+      const statusDiv = document.getElementById('status');
+      statusDiv.textContent = message;
+      statusDiv.className = `status ${type}`;
+    }
+    
+    // Auto-debug on page load
+    window.onload = function() {
+      debugAICoins();
+    };
+  </script>
+</body>
+</html>
