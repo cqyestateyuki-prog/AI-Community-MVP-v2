@@ -179,6 +179,20 @@ class StorageService {
       comments: [],
     };
     
+    // 如果是prompt_sharing类型，初始化投票统计
+    if (newPost.type === 'prompt_sharing') {
+      newPost.votingStats = {
+        totalVotes: 0,
+        effectiveness: 0,
+        workedPerfectly: 0,
+        workedWithTweaks: 0,
+        partiallyHelpful: 0,
+        didntWork: 0,
+        successRate: 0
+      };
+      newPost.useCaseBreakdown = [];
+    }
+    
     posts.unshift(newPost);
     localStorage.setItem(this.POSTS_KEY, JSON.stringify(posts));
     
