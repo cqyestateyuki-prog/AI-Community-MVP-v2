@@ -457,9 +457,12 @@ class StorageService {
       successRate: 0
     };
     
-    // 如果没有新投票，保持原有统计
+    // 如果没有投票，返回带有初始统计的帖子
     if (votes.length === 0) {
-      return post;
+      return this.updatePost(postId, {
+        votingStats: existingStats,
+        useCaseBreakdown: []
+      });
     }
     
     // 计算新投票的统计

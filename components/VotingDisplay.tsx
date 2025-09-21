@@ -62,7 +62,7 @@ export default function VotingDisplay({ post, onVoteSubmitted }: VotingDisplayPr
           onClick={() => setShowVoteModal(true)}
           className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
         >
-          Rate This Prompt
+          Rate the First Prompt
         </button>
       </div>
     );
